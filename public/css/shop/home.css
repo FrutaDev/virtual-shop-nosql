@@ -1,0 +1,117 @@
+/* --- Layout general --- */
+.home-main-content {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.home-container {
+    width: 100%;
+    max-width: 1200px;
+}
+.home-container a {
+    text-decoration: none;
+    color: #000;
+}
+.home-container a:hover {
+    text-decoration: none;
+    color: #000;
+}
+.home-title {
+    text-align: center;
+    margin-bottom: 2.5rem;
+    font-size: 2.1rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+/* --- Grid de productos --- */
+.home-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 2rem;
+}
+
+/* --- Tarjeta de producto --- */
+.home-item {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1.2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.home-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* --- Imagen --- */
+.home-product-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+
+/* --- Texto del producto --- */
+.home-product-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin: 0.5rem 0 0.3rem;
+    text-align: center;
+}
+
+.home-product-price {
+    color: #2b6cb0;
+    font-weight: 600;
+    margin: 0.2rem 0 0.5rem;
+    font-size: 1rem;
+}
+
+.home-product-description {
+    color: #555;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+/* --- Botón Add to Cart --- */
+.add-to-cart {
+    background: #38a169;
+    color: #fff;
+    padding: 0.7rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+    width: 100%;
+}
+
+.add-to-cart:hover {
+    background: #2f855a;
+}
+
+/* --- Mensaje sin productos --- */
+.home-no-products {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+    color: #666;
+    margin-top: 2rem;
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+    .home-product-image {
+        height: 170px;
+    }
+}

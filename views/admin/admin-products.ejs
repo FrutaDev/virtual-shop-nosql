@@ -1,0 +1,30 @@
+<%- include("../includes/head") %>
+<link rel="stylesheet" href="/css/admin/admin-products.css">
+    </head>
+
+    <body>
+        <%- include("../includes/navigation") %>
+            <main class="main-content">
+                <div class="home-container">
+                    <h1>Admin Product</h1>
+                    <% if (products.length > 0) { %>
+                        <% products.forEach(product => { %>
+                            <article class="product-item">
+                                <img class="product-image" src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                                <h2 class="product-title"><%= product.title %></h2>
+                                <p class="product-price"><%= product.price %></p>
+                                <p class="product-description"><%= product.description %></p>
+                                <a href="/admin/add-product/<%= product._id%>?edit=true" class="edit-product">Edit</a>
+                                <form action="/admin/delete-product/<%= product._id %>" method="POST">
+                                    <div class="delete-product-container">
+                                        <button class="delete-product" type="submit">Delete</button>
+                                    </div>
+                                </form>
+                            </article>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="no-products">No products found</p>
+                    <% } %>
+                </div>
+            </main>
+            <%- include("../includes/end") %>

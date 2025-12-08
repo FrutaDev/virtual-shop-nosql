@@ -1,0 +1,31 @@
+<%- include("./includes/head") %>
+<link rel="stylesheet" href="/css/shop/home.css">
+    </head>
+
+    <body>
+        <%- include("./includes/navigation") %>
+            <main class="home-main-content">
+                <div class="home-container">
+                    <h1 class="home-title">Products</h1>
+                    <% if (products.length > 0) { %>
+                        <% products.forEach(product => { %>
+                            <a href="/products/<%= product._id %>">
+                                <article class="home-item">
+                                    <img class="home-product-image" src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                                    <h2 class="home-product-title"><%= product.title %></h2>
+                                    <p class="home-product-price"><%= product.price %></p>
+                                    <p class="home-product-description"><%= product.description %></p>
+                                    <form action="/add-to-cart/<%= product._id %>" method="POST">
+                                        <div class="add-to-cart-container">
+                                            <button class="add-to-cart" type="submit">Add to Cart</button>
+                                        </div>
+                                    </form>
+                                </article>
+                            </a>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="home-no-products">No products found</p>
+                    <% } %>
+                </div>
+            </main>
+            <%- include("./includes/end") %>

@@ -1,0 +1,19 @@
+<%- include("../includes/head") %>
+    <link rel="stylesheet" href="/css/admin/add-product.css">
+    </head>
+
+    <body>
+        <%- include("../includes/navigation") %>
+            <main class="main-content">
+                <div class="form-container">
+                    <h1 class="form-title">Add Product</h1>
+                    <form class="form" action="<% if (editing) { %>/admin/edit-product/<%= product._id %><% } else { %>/admin/add-product<% } %>" method="POST">
+                        <input class="form-control" type="text" name="title" placeholder="Title" value="<% if (editing) {%><%= product.title %><% } %>">
+                        <input class="form-control" type="number" name="price" placeholder="Price" step="0.01" value="<% if (editing) {%><%= product.price %><% } %>">
+                        <input class="form-control" type="text" name="description" placeholder="Description" value="<% if (editing) {%><%= product.description %><% } %>">
+                        <input class="form-control" type="text" name="image" placeholder="Image" value="<% if (editing) {%><%= product.imageUrl %><% } %>">
+                        <button class="btn btn-primary" type="submit"><% if (editing) { %>Edit Product<% } else { %>Add Product<% } %></button>
+                    </form>
+                </div>
+            </main>
+            <%- include("../includes/end") %>

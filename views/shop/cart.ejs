@@ -1,0 +1,34 @@
+<%- include("../includes/head") %>
+<link rel="stylesheet" href="/css/shop/cart.css">
+    </head>
+
+    <body>
+        <%- include("../includes/navigation") %>
+            <main class="main-content">
+                <div class="home-container">
+                    <h1>Cart</h1>
+                    <% if (products.length > 0) { %>
+                        <ul class="cart-list">
+                            <% products.forEach(product => { %>
+                                <li class="cart-item">
+                                        <img class="cart-product-image" src="<%= product.product.imageUrl %>" alt="<%= product.product.title %>">
+                                        <h2 class="cart-product-title"><%= product.product.title %></h2>
+                                        <p class="cart-product-price"><%= product.product.price %></p>
+                                        <p class="cart-product-description"><%= product.product.description %></p>
+                                        <p class="cart-product-quantity"><%= product.quantity %></p>
+                                        <aside class="total-product"><%= product.product.price * product.quantity %></aside>
+                                        <form action="/remove-from-cart/<%= product.product._id %>" method="POST">
+                                            <div class="remove-from-cart-container">
+                                                <input type="number" name="quantity" value="<%= product.quantity %>" min="1">
+                                                <button class="remove-from-cart" type="submit">Remove from Cart</button>
+                                            </div>
+                                        </form>
+                                </li>
+                            <% }) %>
+                        </ul>
+                    <% } else { %>
+                        <p class="cart-no-products">No products in cart</p>
+                    <% } %>
+                </div>
+            </main>
+            <%- include("../includes/end") %>

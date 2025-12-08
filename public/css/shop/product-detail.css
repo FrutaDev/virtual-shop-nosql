@@ -1,0 +1,102 @@
+/* --- Layout general --- */
+.main-content {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+}
+
+.home-container {
+    width: 100%;
+    max-width: 900px;
+}
+
+/* --- Título principal --- */
+.home-container h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    font-weight: 600;
+}
+
+/* --- Tarjeta de detalle del producto --- */
+.product-item {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Imagen --- */
+.product-image {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    border-radius: 14px;
+    object-fit: cover;
+    margin-bottom: 1.5rem;
+}
+
+/* --- Título del producto --- */
+.product-title {
+    font-size: 1.7rem;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* --- Precio --- */
+.product-price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2b6cb0;
+    margin-bottom: 1rem;
+}
+
+/* --- Descripción --- */
+.product-description {
+    max-width: 600px;
+    text-align: center;
+    line-height: 1.5;
+    color: #555;
+    margin-bottom: 2rem;
+    font-size: 1rem;
+}
+
+/* --- Botón Add to Cart --- */
+.add-to-cart-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.add-to-cart {
+    background: #38a169;
+    color: #fff;
+    padding: 0.8rem 2rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background 0.2s ease;
+}
+
+.add-to-cart:hover {
+    background: #2f855a;
+}
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+    .product-item {
+        padding: 1.5rem;
+    }
+    .product-title {
+        font-size: 1.4rem;
+    }
+    .product-image {
+        max-width: 100%;
+    }
+}
