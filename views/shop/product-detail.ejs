@@ -9,12 +9,17 @@
                     <h1>Product Detail</h1>
                     <div class="product-item">
                         <img class="product-image" src="<%= product.imageUrl %>" alt="<%= product.title %>">
-                        <h2 class="product-title"><%= product.title %></h2>
-                        <p class="product-price"><%= product.price %></p>
-                        <p class="product-description"><%= product.description %></p>
+                        <section class="product-info">
+                            <h2 class="product-title"><%= product.title %></h2>
+                            <p class="product-price"><%= product.price %></p>
+                            <p class="product-description"><%= product.description %></p>
+                        </section>
+                        <% if (isLoggedIn) { %>
                         <form class="add-to-cart-container" action="/add-to-cart/<%= product._id %>" method="POST">
+                            <input type="number" name="quantity" value="1" min="1">
                             <button class="add-to-cart" type="submit">Add to Cart</button>
                         </form>                    
+                        <% } %>
                     </div>
                 </div>
             </main>

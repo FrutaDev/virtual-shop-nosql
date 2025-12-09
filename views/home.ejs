@@ -15,11 +15,13 @@
                                     <h2 class="home-product-title"><%= product.title %></h2>
                                     <p class="home-product-price"><%= product.price %></p>
                                     <p class="home-product-description"><%= product.description %></p>
+                                    <% if (isLoggedIn) { %>
                                     <form action="/add-to-cart/<%= product._id %>" method="POST">
                                         <div class="add-to-cart-container">
                                             <button class="add-to-cart" type="submit">Add to Cart</button>
                                         </div>
                                     </form>
+                                    <% } %>
                                 </article>
                             </a>
                         <% }) %>

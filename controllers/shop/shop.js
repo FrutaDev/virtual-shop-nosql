@@ -1,4 +1,5 @@
 const Product = require("../../models/product");
+const Order = require("../../models/order");
 
 const getHomeController = (req, res) => {
     Product.find()
@@ -6,7 +7,8 @@ const getHomeController = (req, res) => {
         res.render("home", {
             title: "Home",
             path: "/",
-            products: products
+            products: products,
+            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch(error => {
@@ -17,7 +19,8 @@ const getHomeController = (req, res) => {
 const getProductsController = (req, res) => {
     res.render("shop/products", {
         title: "Products",
-        path: "/products"
+        path: "/products",
+        isLoggedIn: req.session.isLoggedIn
     });
 };
 
@@ -31,11 +34,11 @@ const getCartController = (req, res) => {
                 quantity: item.quantity
             }
         });
-        console.log(products);
         res.render("shop/cart", {
             title: "Cart",
             path: "/cart",
-            products: products
+            products: products,
+            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch(error => {
@@ -45,9 +48,13 @@ const getCartController = (req, res) => {
 
 const postCartController = (req, res) => {
     const productId = req.params.productId;
+    let quantity = req.body.quantity;
     Product.findById(productId)
     .then(product => {
-        return req.user.addToCart(product);
+        if (!quantity) {
+            quantity = 1;
+        }
+        return req.user.addToCart(product, quantity);
     })
     // eslint-disable-next-line no-unused-vars
     .then(result => {
@@ -58,10 +65,37 @@ const postCartController = (req, res) => {
     });
 };
 
+const postRemoveFromCartController = (req, res) => {
+    const productId = req.params.productId;
+    const quantity = req.body.quantity;
+    req.user
+    .removeANumberFromCart(productId, quantity)
+    // eslint-disable-next-line no-unused-vars
+    .then(result => {
+        res.redirect("/cart");
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
 const getOrdersController = (req, res) => {
-    res.render("shop/orders", {
-        title: "Orders",
-        path: "/orders"
+    Order.find({userId: req.user._id})
+    .populate('items.productId')
+    .then(orders => {
+        orders.forEach(order => {
+            console.log("Items: ", order.items);
+            order.totalPrice = order.items.reduce((total, item) => total + item.productId.price * item.quantity, 0);
+        });
+        res.render("shop/orders", {
+            title: "Orders",
+            path: "/orders",
+            orders: orders,
+            isLoggedIn: req.session.isLoggedIn
+        });
+    })
+    .catch(error => {
+        console.log(error);
     });
 };
 
@@ -69,12 +103,24 @@ const getProductController = (req, res) => {
     const productId = req.params.productId;
     Product.findById(productId)
     .then(product => {
-        console.log("product", product);
         res.render("shop/product-detail", {
             title: "Product",
             path: "/product",
-            product: product
+            product: product,
+            isLoggedIn: req.session.isLoggedIn
         })
+    })
+    .catch(error => {
+        console.log(error);
+    });
+};
+
+const postOrdersController = (req, res) => {
+    req.user
+    .addOrder()
+    // eslint-disable-next-line no-unused-vars
+    .then(result => {
+        res.redirect("/orders");
     })
     .catch(error => {
         console.log(error);
@@ -87,3 +133,5 @@ exports.getCartController = getCartController;
 exports.getOrdersController = getOrdersController;
 exports.getProductController = getProductController;
 exports.postCartController = postCartController;
+exports.postRemoveFromCartController = postRemoveFromCartController;
+exports.postOrdersController = postOrdersController;

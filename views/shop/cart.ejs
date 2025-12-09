@@ -26,6 +26,9 @@
                                 </li>
                             <% }) %>
                         </ul>
+                        <form action="/orders" method="POST">
+                            <button class="checkout-button" type="submit">Ordenar</button>
+                        </form>
                     <% } else { %>
                         <p class="cart-no-products">No products in cart</p>
                     <% } %>

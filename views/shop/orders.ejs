@@ -1,4 +1,5 @@
 <%- include("../includes/head") %>
+<link rel="stylesheet" href="/css/shop/orders.css">
     </head>
 
     <body>
@@ -6,6 +7,27 @@
             <main class="main-content">
                 <div class="home-container">
                     <h1>Orders</h1>
+                    <% if (orders.length > 0) { %>
+                        <% orders.forEach(order => { %>
+                            <article class="order-item">
+                                <p class="order-id"><%= order._id %></p>
+                                <ul class="order-products">
+                                    <% order.items.forEach(item => { %>
+                                        <li class="order-product">
+                                            <img class="order-product-image" src="<%= item.productId.imageUrl %>" alt="<%= item.productId.title %>">
+                                            <p class="order-product-title"><%= item.productId.title %></p>
+                                            <p class="order-product-quantity"><%= item.quantity %></p>
+                                            <p class="order-product-price"><%= item.productId.price * item.quantity %></p>
+                                        </li>
+                                    <% }) %>
+                                </ul>
+                                <p class="order-total"><%= order.totalPrice %></p>
+                            </article>
+
+                        <% }) %>
+                    <% } else { %>
+                        <p class="no-orders">No orders found</p>
+                    <% } %>
                 </div>
             </main>
             <%- include("../includes/end") %>

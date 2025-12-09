@@ -10,7 +10,8 @@ const getAddProductController = (req, res) => {
                     title: "Edit Product",
                     path: "/admin/add-product",
                     editing: true,
-                    product: product
+                    product: product,
+                    isLoggedIn: req.session.isLoggedIn
                 });
             })
             .catch((error) => {
@@ -21,6 +22,7 @@ const getAddProductController = (req, res) => {
         title: "Add Product",
         path: "/admin/add-product",
         editing: false,
+        isLoggedIn: req.session.isLoggedIn
     });
 };
 
@@ -32,7 +34,8 @@ const getProductsController = (req, res) => {
         return res.render("admin/admin-products", {
             title: "Admin Products",
             path: "/admin/products",
-            products: products
+            products: products,
+            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch((error) => {
@@ -47,7 +50,8 @@ const postAddProductController = (req, res) => {
         price: price,
         description: description,
         imageUrl: image,
-        userId: req.user
+        userId: req.user,
+        isLoggedIn: req.session.isLoggedIn
     });
     product.save()
     .then(() => {

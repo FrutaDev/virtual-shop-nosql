@@ -1,0 +1,21 @@
+<%- include("../includes/head") %>
+<link rel="stylesheet" href="/css/login/create-account.css">
+    </head>
+
+    <body>
+        <%- include("../includes/navigation") %>
+            <main class="main-content">
+                <div class="home-container">
+                    <h1>Create User</h1>
+                    <form class="login-form" action="/create-user" method="POST">
+                        <label for="name">Name</label>
+                        <input class="login-input" type="text" name="name" placeholder="Name" id="name">
+                        <label for="email">Email</label>
+                        <input class="login-input" type="text" name="email" placeholder="Email" id="email">
+                        <label for="password">Password</label>
+                        <input class="login-input" type="password" name="password" placeholder="Password" id="password">
+                        <button class="login-button" type="submit">Create User</button>
+                    </form>
+                </div>
+            </main>
+            <%- include("../includes/end") %>
