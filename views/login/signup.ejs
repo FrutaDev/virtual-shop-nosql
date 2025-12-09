@@ -18,6 +18,9 @@
                         <input class="login-input" type="password" name="password" placeholder="contraseña" id="password">
                         <label for="confirm-password">Confirmar contraseña</label>
                         <input class="login-input" type="password" name="confirmPassword" placeholder="confirmar contraseña" id="confirmPassword">
+                        <% if (errors.length > 0) { %>
+                            <p class="error"><%= errors %></p>
+                        <% } %>
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="login-button" type="submit">Crear usuario</button>
                     </form>

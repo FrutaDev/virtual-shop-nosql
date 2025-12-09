@@ -1,63 +1,90 @@
 .main-content {
     display: flex;
     justify-content: center;
-    padding: 2rem 1rem;
+    padding: 2rem;
 }
 
 .home-container {
-    max-width: 450px;
     width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
 
-h1 {
+.home-container h1 {
     text-align: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1.8rem;
+    font-size: 2rem;
+    font-weight: 600;
 }
-
-/* ----- Formulario de Login ----- */
 
 .login-form {
-    background: #ffffff;
-    padding: 2rem;
-    border-radius: 14px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.08);
     display: flex;
     flex-direction: column;
-    gap: 1.2rem;
+    gap: 1rem;
 }
 
 .login-label {
-    font-size: 0.95rem;
     font-weight: 600;
-    margin-bottom: -0.3rem; 
-    color: #333;
+    font-size: 0.95rem;
 }
 
 .login-input {
-    padding: 0.9rem 1rem;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    outline: none;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
     font-size: 1rem;
-    transition: border-color .2s ease-in-out;
+    transition: border-color 0.25s ease;
 }
 
 .login-input:focus {
-    border-color: #4a90e2;
+    outline: none;
+    border-color: #888;
 }
 
 .login-button {
-    padding: 0.9rem;
-    border: none;
-    border-radius: 10px;
-    background: #4a90e2;
+    margin-top: 1rem;
+    background-color: #007bff;
     color: white;
-    font-weight: 600;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    border: none;
     cursor: pointer;
-    transition: background .2s ease-in-out;
-    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.25s ease, transform 0.15s ease;
 }
 
 .login-button:hover {
-    background: #417ec9;
+    background-color: #0069d9;
+    transform: scale(1.02);
+}
+
+.error {
+    color: #d9534f;
+    background: #f8d7da;
+    padding: 0.6rem;
+    border-radius: 6px;
+    border: 1px solid #f5c2c7;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.home-container p {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.home-container a {
+    color: #007bff;
+    font-weight: 500;
+}
+
+.home-container a:hover {
+    text-decoration: underline;
 }

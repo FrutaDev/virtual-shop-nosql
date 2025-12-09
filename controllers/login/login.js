@@ -6,6 +6,7 @@ exports.loginController = (req, res) => {
     res.render("login/login", {
         title: "Login",
         path: "/login",
+        errors: req.flash("error"),
     });
 };
 
@@ -14,16 +15,15 @@ exports.postLoginController = (req, res) => {
     User.findOne({email: email})
         .then(user => {
             if (!user) {
-                console.log("User not found");
+                req.flash("error", "Email o contraseña incorrectos");
                 return res.status(400).redirect("/login");
             }
             return bcrypt.compare(password, user.password)
             .then(result => {
                 if (!result) {
-                    console.log("Invalid password");
+                    req.flash("error", "Email o contraseña incorrectos");
                     return res.status(400).redirect("/login");
                 }
-                console.log("User logged in");
                 req.session.userId = user._id.toString();
                 req.session.isLoggedIn = true;
                 return req.session.save(err => {
@@ -53,6 +53,7 @@ exports.getSignupController = (req, res) => {
     res.render("login/signup", {
         title: "Create User",
         path: "/create-user",
+        errors: req.flash("error"),
     });
 };
 exports.postSignupController = (req, res) => {
@@ -60,9 +61,11 @@ exports.postSignupController = (req, res) => {
     User.findOne({email: email})
     .then(user => {
         if (user) {
+            req.flash("error", "El usuario ya existe");
             return res.status(400).redirect("/signup");
         }
         if (password !== confirmPassword) {
+            req.flash("error", "Las contraseñas no coinciden");
             return res.status(400).redirect("/signup");
         }
         return bcrypt.hash(password, 10)
@@ -76,6 +79,7 @@ exports.postSignupController = (req, res) => {
             });
             return user.save()
             .then(() => {
+                req.flash("success", "Usuario creado exitosamente");
                 res.redirect("/login");
             })
         })

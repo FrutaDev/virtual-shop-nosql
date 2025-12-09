@@ -12,6 +12,9 @@
                         <input class="login-input" type="text" name="email" placeholder="Email" id="email">
                         <label class="login-label" for="password">Password</label>
                         <input class="login-input" type="password" name="password" placeholder="Password" id="password">
+                        <% if (errors.length > 0) { %>
+                            <p class="error"><%= errors %></p>
+                        <% } %>
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="login-button" type="submit">Iniciar Sesión</button>
                     </form>
