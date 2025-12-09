@@ -27,7 +27,7 @@ mongoose.connect(getEnv('MONGODB'))
         resave: false,
         saveUninitialized: false,
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 7,  // 1 semana
+            maxAge: 1000 * 60 * 60 * 24 * 7,  // 1 week
             httpOnly: true,
             secure: false
         },

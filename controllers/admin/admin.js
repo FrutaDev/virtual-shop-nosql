@@ -1,6 +1,6 @@
 const Product = require("../../models/product");
 
-const getAddProductController = (req, res) => {
+exports.getAddProductController = (req, res) => {
     const edit = req.query.edit;
     const productId = req.params.productId;
     if (edit && productId) {
@@ -26,7 +26,7 @@ const getAddProductController = (req, res) => {
     });
 };
 
-const getProductsController = (req, res) => {
+exports.getProductsController = (req, res) => {
     Product.find()
     .populate('userId')
     .then((products) => {
@@ -43,7 +43,7 @@ const getProductsController = (req, res) => {
     });
 };
 
-const postAddProductController = (req, res) => {
+exports.postAddProductController = (req, res) => {
     const { title, price, description, image } = req.body;
     const product = new Product({
         title: title,
@@ -63,7 +63,7 @@ const postAddProductController = (req, res) => {
     });
 };
 
-const postEditProductController = (req, res) => {
+exports.postEditProductController = (req, res) => {
     const { title, price, description, image } = req.body;
     const productId = req.params.productId;
     Product.findById(productId)
@@ -83,7 +83,7 @@ const postEditProductController = (req, res) => {
     });
 };
 
-const deleteProductController = (req, res) => {
+exports.deleteProductController = (req, res) => {
     const productId = req.params.productId;
     return Product.findByIdAndDelete(productId)
         .then(() => {
@@ -94,10 +94,3 @@ const deleteProductController = (req, res) => {
             console.log(error);
         });
 };
-
-exports.getAddProductController = getAddProductController;
-exports.getProductsController = getProductsController;
-exports.postAddProductController = postAddProductController;
-exports.postEditProductController = postEditProductController;
-exports.deleteProductController = deleteProductController;
-

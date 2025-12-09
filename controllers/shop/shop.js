@@ -1,7 +1,7 @@
 const Product = require("../../models/product");
 const Order = require("../../models/order");
 
-const getHomeController = (req, res) => {
+exports.getHomeController = (req, res) => {
     Product.find()
     .then(products => {
         res.render("home", {
@@ -16,7 +16,7 @@ const getHomeController = (req, res) => {
     });
 };
 
-const getProductsController = (req, res) => {
+exports.getProductsController = (req, res) => {
     res.render("shop/products", {
         title: "Products",
         path: "/products",
@@ -24,7 +24,7 @@ const getProductsController = (req, res) => {
     });
 };
 
-const getCartController = (req, res) => {
+exports.getCartController = (req, res) => {
     req.user
     .populate('cart.items.productId')
     .then(user => {
@@ -46,7 +46,7 @@ const getCartController = (req, res) => {
     });
 };
 
-const postCartController = (req, res) => {
+exports.postCartController = (req, res) => {
     const productId = req.params.productId;
     let quantity = req.body.quantity;
     Product.findById(productId)
@@ -65,7 +65,7 @@ const postCartController = (req, res) => {
     });
 };
 
-const postRemoveFromCartController = (req, res) => {
+exports.postRemoveFromCartController = (req, res) => {
     const productId = req.params.productId;
     const quantity = req.body.quantity;
     req.user
@@ -79,7 +79,7 @@ const postRemoveFromCartController = (req, res) => {
     });
 };
 
-const getOrdersController = (req, res) => {
+exports.getOrdersController = (req, res) => {
     Order.find({userId: req.user._id})
     .populate('items.productId')
     .then(orders => {
@@ -99,7 +99,7 @@ const getOrdersController = (req, res) => {
     });
 };
 
-const getProductController = (req, res) => {
+exports.getProductController = (req, res) => {
     const productId = req.params.productId;
     Product.findById(productId)
     .then(product => {
@@ -115,7 +115,7 @@ const getProductController = (req, res) => {
     });
 };
 
-const postOrdersController = (req, res) => {
+exports.postOrdersController = (req, res) => {
     req.user
     .addOrder()
     // eslint-disable-next-line no-unused-vars
@@ -126,12 +126,3 @@ const postOrdersController = (req, res) => {
         console.log(error);
     });
 };
-
-exports.getHomeController = getHomeController;
-exports.getProductsController = getProductsController;
-exports.getCartController = getCartController;
-exports.getOrdersController = getOrdersController;
-exports.getProductController = getProductController;
-exports.postCartController = postCartController;
-exports.postRemoveFromCartController = postRemoveFromCartController;
-exports.postOrdersController = postOrdersController;

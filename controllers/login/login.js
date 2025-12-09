@@ -1,6 +1,6 @@
 const User = require("../../models/user");
 
-const loginController = (req, res) => {
+exports.loginController = (req, res) => {
     res.render("login/login", {
         title: "Login",
         path: "/login",
@@ -8,15 +8,7 @@ const loginController = (req, res) => {
     });
 };
 
-const createUserController = (req, res) => {
-    res.render("login/create-user", {
-        title: "Create User",
-        path: "/create-user",
-        isLoggedIn: req.session.isLoggedIn
-    });
-};
-
-const postLoginController = (req, res) => {
+exports.postLoginController = (req, res) => {
     User.findById("69386c3aa58f6c2658eb1dcd")
         .then(user => {
             req.session.userId = user._id.toString();
@@ -35,7 +27,7 @@ const postLoginController = (req, res) => {
         });
 }
 
-const postLogoutController = (req, res) => {
+exports.postLogoutController = (req, res) => {
     req.session.destroy(err => {
         if (err) {
             console.log(err);
@@ -45,9 +37,29 @@ const postLogoutController = (req, res) => {
         res.redirect("/");
     });
 }
-
-
-exports.loginController = loginController;
-exports.createUserController = createUserController;
-exports.postLoginController = postLoginController;
-exports.postLogoutController = postLogoutController;
+exports.getSignupController = (req, res) => {
+    res.render("login/signup", {
+        title: "Create User",
+        path: "/create-user",
+        isLoggedIn: req.session.isLoggedIn
+    });
+};
+exports.postSignupController = (req, res) => {
+    const { name, email, password } = req.body;
+    const hashedPassword = password;
+    const user = new User({
+        name: name,
+        email: email,
+        password: hashedPassword,
+        cart: {
+            items: []
+        }
+    });
+    user.save()
+    .then(() => {
+        res.redirect("/login");
+    })
+    .catch(error => {
+        console.log(error);
+    });
+}
