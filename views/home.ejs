@@ -18,6 +18,7 @@
                                     <% if (isLoggedIn) { %>
                                     <form action="/add-to-cart/<%= product._id %>" method="POST">
                                         <div class="add-to-cart-container">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                                             <button class="add-to-cart" type="submit">Add to Cart</button>
                                         </div>
                                     </form>

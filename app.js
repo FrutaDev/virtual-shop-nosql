@@ -11,6 +11,9 @@ const app = express();
 
 const User = require("./models/user");
 
+const csrf = require("csurf");
+
+const csrfProtection = csrf();
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
@@ -37,6 +40,7 @@ mongoose.connect(getEnv('MONGODB'))
             stringify: false
         })
     }));
+    app.use(csrfProtection);
 
     app.use((req, res, next) => {
         if (!req.session.userId) {
@@ -50,6 +54,12 @@ mongoose.connect(getEnv('MONGODB'))
         .catch(err => console.log(err));
     })
 
+    app.use((req, res, next) => {
+        res.locals.isLoggedIn = req.session.isLoggedIn;
+        res.locals.csrfToken = req.csrfToken();
+        next();
+    });
+
     app.use(loginRoutes);
     app.use(shopRoutes);
     app.use('/admin', adminRoutes);
@@ -62,27 +72,10 @@ mongoose.connect(getEnv('MONGODB'))
         });
     });
 
-        User.findOne().then(user => {
-            if (!user) {
-                const user = new User({
-                    name: "Erick",
-                    email: "erick@erick.com",
-                    cart: {
-                        items: []
-                    }
-                });
-                return user.save();
-            }
-        })  
-        .then(() => {
-            app.listen(3000, () => {
-                console.log("Server is running on port http://127.0.0.1:3000/");
-            });
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+    app.listen(3000, () => {
+        console.log("Server is running on port http://127.0.0.1:3000/");
     })
-    .catch((error) => {
-        console.log(error);
-    });
+})
+.catch((error) => {
+    console.log(error);
+});

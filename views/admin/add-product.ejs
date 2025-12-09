@@ -12,6 +12,7 @@
                         <input class="form-control" type="number" name="price" placeholder="Price" step="0.01" value="<% if (editing) {%><%= product.price %><% } %>">
                         <input class="form-control" type="text" name="description" placeholder="Description" value="<% if (editing) {%><%= product.description %><% } %>">
                         <input class="form-control" type="text" name="image" placeholder="Image" value="<% if (editing) {%><%= product.imageUrl %><% } %>">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="btn btn-primary" type="submit"><% if (editing) { %>Edit Product<% } else { %>Add Product<% } %></button>
                     </form>
                 </div>

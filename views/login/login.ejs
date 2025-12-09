@@ -12,9 +12,10 @@
                         <input class="login-input" type="text" name="email" placeholder="Email" id="email">
                         <label class="login-label" for="password">Password</label>
                         <input class="login-input" type="password" name="password" placeholder="Password" id="password">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="login-button" type="submit">Iniciar Sesión</button>
                     </form>
-                    <p>No tienes una cuenta? <a href="/create-user">Crea una</a></p>
+                    <p>No tienes una cuenta? <a href="/signup">Crea una</a></p>
                 </div>
             </main>
 

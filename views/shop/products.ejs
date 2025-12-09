@@ -1,11 +1,36 @@
 <%- include("../includes/head") %>
+<link rel="stylesheet" href="/css/shop/products.css">
     </head>
 
     <body>
         <%- include("../includes/navigation") %>
-            <main class="main-content">
-                <div class="home-container">
+            <main class="products-main-content">
+                <div class="products-container">
                     <h1>Products</h1>
+                    <% if (products.length > 0) { %>
+                        <% products.forEach(product => { %>
+                            <a href="/products/<%= product._id %>">
+                                <article class="products-item">
+                                    <img class="products-image" src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                                    <div class="products-info">
+                                        <h2 class="products-title"><%= product.title %></h2>
+                                        <p class="products-price"><%= product.price %></p>
+                                        <p class="products-description"><%= product.description %></p>
+                                    </div>
+                                    <% if (isLoggedIn) { %>
+                                    <form action="/add-to-cart/<%= product._id %>" method="POST">
+                                        <div class="add-to-cart-container">
+                                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                            <button class="add-to-cart" type="submit">Add to Cart</button>
+                                        </div>
+                                    </form>
+                                    <% } %>
+                                </article>
+                            </a>
+                        <% }) %>
+                    <% } else { %>
+                        <p class="no-products">No products found</p>
+                    <% } %>
                 </div>
             </main>
             <%- include("../includes/end") %>

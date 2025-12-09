@@ -1,4 +1,3 @@
-/* --- Layout general --- */
 .home-main-content {
     padding: 2rem;
     display: flex;
@@ -26,14 +25,12 @@
     letter-spacing: 0.5px;
 }
 
-/* --- Grid de productos --- */
 .home-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
     gap: 2rem;
 }
 
-/* --- Tarjeta de producto --- */
 .home-item {
     background: #ffffff;
     border-radius: 14px;
@@ -50,7 +47,6 @@
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
-/* --- Imagen --- */
 .home-product-image {
     width: 100%;
     height: 200px;
@@ -59,7 +55,6 @@
     margin-bottom: 1rem;
 }
 
-/* --- Texto del producto --- */
 .home-product-title {
     font-size: 1.2rem;
     font-weight: 600;
@@ -82,7 +77,6 @@
     margin-bottom: 1rem;
 }
 
-/* --- Botón Add to Cart --- */
 .add-to-cart {
     background: #38a169;
     color: #fff;
@@ -100,7 +94,6 @@
     background: #2f855a;
 }
 
-/* --- Mensaje sin productos --- */
 .home-no-products {
     grid-column: 1 / -1;
     text-align: center;
@@ -109,9 +102,9 @@
     margin-top: 2rem;
 }
 
-/* --- Responsive --- */
 @media (max-width: 600px) {
     .home-product-image {
         height: 170px;
     }
 }
+

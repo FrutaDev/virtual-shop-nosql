@@ -83,7 +83,6 @@ h1 {
     background: #0069d9;
 }
 
-/* Responsive */
 @media (max-width: 850px) {
     .product-item {
         grid-template-columns: 1fr;

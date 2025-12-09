@@ -8,7 +8,6 @@ exports.getHomeController = (req, res) => {
             title: "Home",
             path: "/",
             products: products,
-            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch(error => {
@@ -17,10 +16,16 @@ exports.getHomeController = (req, res) => {
 };
 
 exports.getProductsController = (req, res) => {
-    res.render("shop/products", {
-        title: "Products",
-        path: "/products",
-        isLoggedIn: req.session.isLoggedIn
+    Product.find()
+    .then(products => {
+        res.render("shop/products", {
+            title: "Products",
+            path: "/products",
+            products: products,
+        });
+    })
+    .catch(error => {
+        console.log(error);
     });
 };
 
@@ -38,7 +43,6 @@ exports.getCartController = (req, res) => {
             title: "Cart",
             path: "/cart",
             products: products,
-            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch(error => {
@@ -84,14 +88,12 @@ exports.getOrdersController = (req, res) => {
     .populate('items.productId')
     .then(orders => {
         orders.forEach(order => {
-            console.log("Items: ", order.items);
             order.totalPrice = order.items.reduce((total, item) => total + item.productId.price * item.quantity, 0);
         });
         res.render("shop/orders", {
             title: "Orders",
             path: "/orders",
             orders: orders,
-            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch(error => {
@@ -107,7 +109,6 @@ exports.getProductController = (req, res) => {
             title: "Product",
             path: "/product",
             product: product,
-            isLoggedIn: req.session.isLoggedIn
         })
     })
     .catch(error => {

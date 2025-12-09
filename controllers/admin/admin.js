@@ -11,7 +11,6 @@ exports.getAddProductController = (req, res) => {
                     path: "/admin/add-product",
                     editing: true,
                     product: product,
-                    isLoggedIn: req.session.isLoggedIn
                 });
             })
             .catch((error) => {
@@ -22,20 +21,22 @@ exports.getAddProductController = (req, res) => {
         title: "Add Product",
         path: "/admin/add-product",
         editing: false,
-        isLoggedIn: req.session.isLoggedIn
     });
 };
 
 exports.getProductsController = (req, res) => {
-    Product.find()
-    .populate('userId')
+    console.log(req.user);
+    req.user
+    .populate('cart.items.productId')
+    .then((user) => {
+        return Product.find({userId: user._id})
+    })
     .then((products) => {
         console.log(products);
         return res.render("admin/admin-products", {
             title: "Admin Products",
             path: "/admin/products",
             products: products,
-            isLoggedIn: req.session.isLoggedIn
         });
     })
     .catch((error) => {
@@ -51,7 +52,6 @@ exports.postAddProductController = (req, res) => {
         description: description,
         imageUrl: image,
         userId: req.user,
-        isLoggedIn: req.session.isLoggedIn
     });
     product.save()
     .then(() => {

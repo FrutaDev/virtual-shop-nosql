@@ -24,6 +24,7 @@
         <% if (isLoggedIn) { %>
             <li class="navigation-item">
                 <form action="/logout" method="post">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                     <button class="button-logout" type="submit">Logout</button>
                 </form>
             </li>
