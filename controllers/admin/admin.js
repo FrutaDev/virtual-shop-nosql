@@ -1,5 +1,6 @@
 const Product = require("../../models/product");
 
+
 exports.getAddProductController = (req, res) => {
     const edit = req.query.edit;
     const productId = req.params.productId;
@@ -11,6 +12,8 @@ exports.getAddProductController = (req, res) => {
                     path: "/admin/add-product",
                     editing: true,
                     product: product,
+                    errors: req.flash('error'),
+                    success: req.flash('success'),
                 });
             })
             .catch((error) => {
@@ -21,22 +24,20 @@ exports.getAddProductController = (req, res) => {
         title: "Add Product",
         path: "/admin/add-product",
         editing: false,
+        errors: req.flash('error'),
+        success: req.flash('success'),
     });
 };
 
 exports.getProductsController = (req, res) => {
-    console.log(req.user);
-    req.user
-    .populate('cart.items.productId')
-    .then((user) => {
-        return Product.find({userId: user._id})
-    })
+    Product.find({ userId: req.user._id })
     .then((products) => {
-        console.log(products);
         return res.render("admin/admin-products", {
             title: "Admin Products",
             path: "/admin/products",
             products: products,
+            errors: req.flash('error'),
+            success: req.flash('success'),
         });
     })
     .catch((error) => {
@@ -55,7 +56,7 @@ exports.postAddProductController = (req, res) => {
     });
     product.save()
     .then(() => {
-        console.log("Product saved");
+        req.flash("success", "Producto agregado");
         res.redirect("/admin/products");
     })
     .catch((error) => {
@@ -68,15 +69,26 @@ exports.postEditProductController = (req, res) => {
     const productId = req.params.productId;
     Product.findById(productId)
     .then((product) => {
+        if (!product) {
+            req.flash("error", "Producto no encontrado");
+            return res.redirect("/");
+        }
+        if (product.userId.toString() !== req.user._id.toString()) {
+            req.flash("error", "Tú no tienes permiso para editar este producto");
+            return res.redirect("/");
+        }
         product.title = title;
         product.price = price;
         product.description = description;
         product.imageUrl = image;
-        return product.save();
-    })
-    .then(() => {
-        console.log("Product updated");
-        res.redirect("/admin/products");
+        return product.save()
+        .then(() => {
+            req.flash("success", "Producto actualizado");
+            res.redirect("/admin/products");
+        })
+        .catch((error) => {
+            console.log(error);
+        });
     })
     .catch((error) => {
         console.log(error);
@@ -85,9 +97,17 @@ exports.postEditProductController = (req, res) => {
 
 exports.deleteProductController = (req, res) => {
     const productId = req.params.productId;
-    return Product.findByIdAndDelete(productId)
-        .then(() => {
-            console.log("Product deleted");
+    return Product.deleteOne({ _id: productId, userId: req.user._id })
+        .then((product) => {
+            if (!product) {
+                req.flash("error", "Producto no encontrado");
+                return res.redirect("/");
+            }
+            if (product.userId.toString() !== req.user._id.toString()) {
+                req.flash("error", "Tú no tienes permiso para eliminar este producto");
+                return res.redirect("/");
+            }
+            req.flash("success", "Producto eliminado");
             res.redirect("/admin/products");
         })
         .catch((error) => {

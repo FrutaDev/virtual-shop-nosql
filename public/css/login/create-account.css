@@ -74,6 +74,15 @@
     text-align: center;
 }
 
+.login-link {
+    color: #007bff;
+    font-weight: 500;
+}
+
+.login-link:hover {
+    text-decoration: underline;
+}
+
 @media (max-width: 480px) {
     .home-container {
         margin-top: 1rem;

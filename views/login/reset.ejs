@@ -1,0 +1,24 @@
+<%- include("../includes/head") %>
+<link rel="stylesheet" href="/css/login/login.css">
+    </head>
+
+    <body>
+        <%- include("../includes/navigation") %>
+            <main class="main-content">
+                <div class="home-container">
+                    <h1>Restablecer contraseña</h1>
+                    <form class="login-form" action="/reset" method="POST">
+                        <% if (errors.length > 0) { %>
+                        <p class="error"><%= errors %></p>
+                        <% } %>
+                        <% if (success.length > 0) { %>
+                        <p class="success"><%= success %></p>
+                        <% } %>
+                        <label for="email">Correo electrónico</label>
+                        <input class="login-input" type="text" name="email" placeholder="correo electrónico" id="email">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <button class="login-button" type="submit">Verificar correo</button>
+                    </form>
+                </div>
+            </main>
+            <%- include("../includes/end") %>

@@ -94,6 +94,10 @@
     background: #2f855a;
 }
 
+.home-title-container {
+    display: flex;
+    width: 100%;
+}
 .home-no-products {
     grid-column: 1 / -1;
     text-align: center;

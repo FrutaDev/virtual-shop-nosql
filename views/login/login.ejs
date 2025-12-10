@@ -6,19 +6,24 @@
         <%- include("../includes/navigation") %>
             <main class="main-content">
                 <div class="home-container">
-                    <h1>Login</h1>
+                    <img class="login-img" src="/assets/logovs.png" alt="login">
+                    <hr class="login-hr">
+                    <% if (success.length > 0) { %>
+                        <p class="success"><%= success %></p>
+                    <% } %>
+                    <% if (errors.length > 0) { %>
+                        <p class="error"><%= errors %></p>
+                    <% } %>
                     <form class="login-form" action="/login" method="POST">
                         <label class="login-label" for="email">Email</label>
                         <input class="login-input" type="text" name="email" placeholder="Email" id="email">
                         <label class="login-label" for="password">Password</label>
                         <input class="login-input" type="password" name="password" placeholder="Password" id="password">
-                        <% if (errors.length > 0) { %>
-                            <p class="error"><%= errors %></p>
-                        <% } %>
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
                         <button class="login-button" type="submit">Iniciar Sesión</button>
                     </form>
                     <p>No tienes una cuenta? <a href="/signup">Crea una</a></p>
+                    <p>¿Olvidaste tu contraseña? <a href="/reset">Restablecer contraseña</a></p>
                 </div>
             </main>
 

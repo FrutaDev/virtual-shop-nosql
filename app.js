@@ -19,19 +19,20 @@ const csrfProtection = csrf();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+
 app.set('view engine', 'ejs');
 
 
 mongoose.connect(getEnv('MONGODB'))
-    .then(() => {
-        console.log("Connected to MongoDB");
+.then(() => {
+    console.log("Connected to MongoDB");
 
         app.use(session({
-        secret: getEnv("SESSION_SECRET"),
-        resave: false,
+            secret: getEnv("SESSION_SECRET"),
+            resave: false,
         saveUninitialized: false,
         cookie: {
-            maxAge: 1000 * 60 * 60 * 24 * 7,  // 1 week
+            maxAge: 1000 * 60 * 60 * 24 * 7, 
             httpOnly: true,
             secure: false
         },
@@ -41,6 +42,7 @@ mongoose.connect(getEnv('MONGODB'))
             stringify: false
         })
     }));
+    
     app.use(csrfProtection);
     app.use(flash());
 

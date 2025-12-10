@@ -8,6 +8,7 @@ exports.getHomeController = (req, res) => {
             title: "Home",
             path: "/",
             products: products,
+            errors: req.flash('error')
         });
     })
     .catch(error => {

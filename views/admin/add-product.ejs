@@ -7,6 +7,12 @@
             <main class="main-content">
                 <div class="form-container">
                     <h1 class="form-title">Add Product</h1>
+                    <% if (errors.length > 0) { %>
+                        <p class="error-message"><%= errors %></p>
+                    <% } %>
+                    <% if (success.length > 0) { %>
+                        <p class="success-message"><%= success %></p>
+                    <% } %>
                     <form class="form" action="<% if (editing) { %>/admin/edit-product/<%= product._id %><% } else { %>/admin/add-product<% } %>" method="POST">
                         <input class="form-control" type="text" name="title" placeholder="Title" value="<% if (editing) {%><%= product.title %><% } %>">
                         <input class="form-control" type="number" name="price" placeholder="Price" step="0.01" value="<% if (editing) {%><%= product.price %><% } %>">
