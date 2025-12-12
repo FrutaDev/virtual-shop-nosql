@@ -23,6 +23,17 @@
     color: #333;
 }
 
+.error {
+    background: #fdeaea;
+    color: #d33;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    margin-top: 0.5rem;
+    margin-bottom: 0.8rem;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+
 .form {
     display: flex;
     flex-direction: column;

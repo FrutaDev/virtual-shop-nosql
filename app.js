@@ -17,6 +17,7 @@ const csrf = require("csurf");
 const csrfProtection = csrf();
 
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
 
 
@@ -72,6 +73,16 @@ mongoose.connect(getEnv('MONGODB'))
         res.status(404).render('404', {
             title: '404',
             path: '/404',
+            isLoggedIn: req.session.isLoggedIn
+        });
+    });
+
+    //eslint-disable-next-line no-unused-vars
+    app.use((error, req, res, next) => {
+        console.error(error);
+        res.status(500).render('500', {
+            title: 'Error!',
+            path: '/500',
             isLoggedIn: req.session.isLoggedIn
         });
     });

@@ -1,22 +1,26 @@
 const Product = require("../../models/product");
 const Order = require("../../models/order");
 
-exports.getHomeController = (req, res) => {
+const { validationResult } = require("express-validator");
+
+exports.getHomeController = (req, res, next) => {
     Product.find()
     .then(products => {
         res.render("home", {
             title: "Home",
             path: "/",
             products: products,
-            errors: req.flash('error')
+            errors: validationResult(req).array(),
         });
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 };
 
-exports.getProductsController = (req, res) => {
+exports.getProductsController = (req, res, next) => {
     Product.find()
     .then(products => {
         res.render("shop/products", {
@@ -25,12 +29,14 @@ exports.getProductsController = (req, res) => {
             products: products,
         });
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 };
 
-exports.getCartController = (req, res) => {
+exports.getCartController = (req, res, next) => {
     req.user
     .populate('cart.items.productId')
     .then(user => {
@@ -46,12 +52,14 @@ exports.getCartController = (req, res) => {
             products: products,
         });
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 };
 
-exports.postCartController = (req, res) => {
+exports.postCartController = (req, res, next) => {
     const productId = req.params.productId;
     let quantity = req.body.quantity;
     Product.findById(productId)
@@ -65,12 +73,14 @@ exports.postCartController = (req, res) => {
     .then(result => {
         res.redirect("/cart");
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     });
 };
 
-exports.postRemoveFromCartController = (req, res) => {
+exports.postRemoveFromCartController = (req, res, next) => {
     const productId = req.params.productId;
     const quantity = req.body.quantity;
     req.user
@@ -79,12 +89,14 @@ exports.postRemoveFromCartController = (req, res) => {
     .then(result => {
         res.redirect("/cart");
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(err);
     });
 };
 
-exports.getOrdersController = (req, res) => {
+exports.getOrdersController = (req, res, next) => {
     Order.find({userId: req.user._id})
     .populate('items.productId')
     .then(orders => {
@@ -97,12 +109,14 @@ exports.getOrdersController = (req, res) => {
             orders: orders,
         });
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(err);
     });
 };
 
-exports.getProductController = (req, res) => {
+exports.getProductController = (req, res, next) => {
     const productId = req.params.productId;
     Product.findById(productId)
     .then(product => {
@@ -112,19 +126,23 @@ exports.getProductController = (req, res) => {
             product: product,
         })
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(err);
     });
 };
 
-exports.postOrdersController = (req, res) => {
+exports.postOrdersController = (req, res, next) => {
     req.user
     .addOrder()
     // eslint-disable-next-line no-unused-vars
     .then(result => {
         res.redirect("/orders");
     })
-    .catch(error => {
-        console.log(error);
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(err);
     });
 };

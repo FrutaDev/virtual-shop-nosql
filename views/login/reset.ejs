@@ -11,9 +11,6 @@
                         <% if (errors.length > 0) { %>
                         <p class="error"><%= errors %></p>
                         <% } %>
-                        <% if (success.length > 0) { %>
-                        <p class="success"><%= success %></p>
-                        <% } %>
                         <label for="email">Correo electrónico</label>
                         <input class="login-input" type="text" name="email" placeholder="correo electrónico" id="email">
                         <input type="hidden" name="_csrf" value="<%= csrfToken %>">

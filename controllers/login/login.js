@@ -7,6 +7,7 @@ const nodemailer = require("nodemailer");
 const sendgridTransport = require("nodemailer-sendgrid-transport");
 const getEnv = require("getenv");
 
+const { validationResult } = require("express-validator");
 
 const transporter = nodemailer.createTransport(sendgridTransport({
     auth: {
@@ -18,23 +19,20 @@ exports.loginController = (req, res) => {
     res.render("login/login", {
         title: "Login",
         path: "/login",
-        errors: req.flash("error"),
-        success: req.flash("success"),
+        errors: validationResult(req).array(),
     });
 };
 
-exports.postLoginController = (req, res) => {
+exports.postLoginController = (req, res, next) => {
     const { email, password } = req.body;
-    User.findOne({email: email})
+    User.findOne({email: email.toLowerCase()})
         .then(user => {
             if (!user) {
-                req.flash("error", "Email o contraseña incorrectos");
                 return res.status(400).redirect("/login");
             }
             return bcrypt.compare(password, user.password)
             .then(result => {
                 if (!result) {
-                    req.flash("error", "Email o contraseña incorrectos");
                     return res.status(400).redirect("/login");
                 }
                 req.session.userId = user._id.toString();
@@ -47,10 +45,12 @@ exports.postLoginController = (req, res) => {
                 res.redirect("/");
             })
         })
-        .catch(error => {
-            console.log(error);
-        });
     })
+    .catch(err => {
+        const errorObj = new Error(err);
+        errorObj.httpStatusCode = 500;
+        return next(errorObj);        
+    });
 }
 
 exports.postLogoutController = (req, res) => {
@@ -62,37 +62,53 @@ exports.postLogoutController = (req, res) => {
         res.redirect("/");
     });
 }
+
 exports.getSignupController = (req, res) => {
+    const error = validationResult(req)
+    console.log(error.array());
     res.render("login/signup", {
         title: "Create User",
         path: "/create-user",
-        errors: req.flash("error"),
+        errors: error.array(),
+        name: "",
+        lastname: "",
+        email: "",
     });
 };
-exports.postSignupController = (req, res) => {
+
+exports.postSignupController = (req, res, next) => {
     const { name, lastname, email, password, confirmPassword } = req.body;
-    User.findOne({email: email})
+    const errors = validationResult(req);
+    console.log(errors.array());
+    if (!errors.isEmpty()) {
+        return res.status(400).render("login/signup", {
+            title: "Create User",
+            path: "/create-user",
+            errors: errors.array(),
+            name: name,
+            lastname: lastname,
+            email: email.toLowerCase(),
+        });
+    }
+    User.findOne({email: email.toLowerCase()})
     .then(user => {
         if (user) {
-            req.flash("error", "El usuario ya existe");
             return res.status(400).redirect("/signup");
         }
         if (password !== confirmPassword) {
-            req.flash("error", "Las contraseñas no coinciden");
             return res.status(400).redirect("/signup");
         }
         return bcrypt.hash(password, 10)
         .then(hashedPassword => {
             const user = new User({
-                name: name,
-                lastName: lastname,
-                email: email,
+                name: name.trim(),
+                lastName: lastname.trim(),
+                email: email.trim(),
                 password: hashedPassword,
                 cart: { items: [] }
             });
             return user.save()
             .then(() => {
-                req.flash("success", "Usuario creado exitosamente");
                 transporter.sendMail({
                     to: email,
                     from: "frutabanana20@gmail.com",
@@ -102,8 +118,10 @@ exports.postSignupController = (req, res) => {
                 res.redirect("/login");
             })
         })
-        .catch(error => {
-            console.log(error);
+        .catch(err => {
+            const error = new Error(err);
+            error.httpStatusCode = 500;
+            return next(error);
         });
     })
 }
@@ -112,18 +130,16 @@ exports.getResetController = (req, res) => {
     res.render("login/reset", {
         title: "Restablecer contraseña",
         path: "/reset",
-        errors: req.flash("error"),
-        success: req.flash("success"),
+        errors: validationResult(req).array(),
     });
 };
 
-exports.postResetController = (req, res) => {
+exports.postResetController = (req, res, next) => {
     const { email } = req.body;
     console.log(email);
     User.findOne({email: email})
     .then(user => {
         if (!user) {
-            req.flash("error", "El usuario no existe");
             return res.status(400).redirect("/reset");
         }
         crypto.randomBytes(32, (err, buffer) => {
@@ -136,7 +152,6 @@ exports.postResetController = (req, res) => {
             user.resetTokenExpiration = Date.now() + 3600000;
             return user.save()
             .then(() => {
-                req.flash("success", "Correo enviado exitosamente");
                 transporter.sendMail({
                     to: email,
                     from: "frutabanana20@gmail.com",
@@ -150,31 +165,32 @@ exports.postResetController = (req, res) => {
             })
         })
     })
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
+    })
 }
 
 exports.getNewPasswordController = (req, res) => {
     const { token } = req.params;
-    console.log(token);
     res.render("login/new-password", {
         title: "Restablecer contraseña",
         path: "/new-password",
-        errors: req.flash("error"),
-        success: req.flash("success"),
-        token: token
+        token: token,
+        errors: validationResult(req).array(),
     });
 };
 
-exports.postNewPasswordController = (req, res) => {
+exports.postNewPasswordController = (req, res, next) => {
     const { password, confirmPassword } = req.body;
     const { token } = req.params;
     if (password !== confirmPassword) {
-        req.flash("error", "Las contraseñas no coinciden");
         return res.status(400).redirect(`/new-password/${token}`);
     }
     User.findOne({resetToken: token, resetTokenExpiration: { $gt: Date.now() }})
     .then(user => {
         if (!user) {
-            req.flash("error", "El token no es válido");
             return res.status(400).redirect(`/new-password/${token}`);
         }
         return bcrypt.hash(password, 10)
@@ -184,9 +200,13 @@ exports.postNewPasswordController = (req, res) => {
             user.resetTokenExpiration = undefined;
             return user.save()
             .then(() => {
-                req.flash("success", "Contraseña restablecida exitosamente");
                 res.redirect("/login");
             })
         })
+    })
+    .catch(err => {
+        const error = new Error(err);
+        error.httpStatusCode = 500;
+        return next(error);
     })
 }
